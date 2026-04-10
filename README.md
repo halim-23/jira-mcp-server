@@ -1,10 +1,61 @@
 # Jira & Confluence MCP Server
 
-An MCP (Model Context Protocol) server that lets AI assistants interact with **Jira** and **Confluence** via natural language.
+[![PyPI version](https://img.shields.io/pypi/v/jira-mcp-server.svg)](https://pypi.org/project/jira-mcp-server/)
+[![Python](https://img.shields.io/pypi/pyversions/jira-mcp-server.svg)](https://pypi.org/project/jira-mcp-server/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants interact with **Jira** and **Confluence** via natural language. Works with Claude, GitHub Copilot, and any MCP-compatible client.
+
+---
+
+## Quick Start (Recommended)
+
+### Install via `uvx` (no clone needed)
+
+```bash
+# 1. Get your Atlassian API token at:
+#    https://id.atlassian.com/manage-profile/security/api-tokens
+
+# 2. Add to your MCP client config:
+```
+
+```json
+{
+  "mcpServers": {
+    "jira-mcp-server": {
+      "type": "local",
+      "command": "uvx",
+      "args": ["jira-mcp-server"],
+      "env": {
+        "ATLASSIAN_URL": "https://your-domain.atlassian.net",
+        "ATLASSIAN_EMAIL": "your-email@example.com",
+        "ATLASSIAN_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+That's it — `uvx` automatically downloads and runs the package in an isolated environment.
+
+> **`uvx` not installed?** Run: `pip install uv` or see [uv installation docs](https://docs.astral.sh/uv/getting-started/installation/).
+
+---
+
+## MCP Client Config Locations
+
+| Client | Config file |
+|--------|-------------|
+| **GitHub Copilot CLI** | `~/.copilot/mcp-config.json` |
+| **Claude Desktop (macOS)** | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| **Claude Desktop (Windows)** | `%APPDATA%\Claude\claude_desktop_config.json` |
+| **Claude Desktop (Linux)** | `~/.config/claude/claude_desktop_config.json` |
+
+---
 
 ## Features
 
-### Jira Tools (35+ tools)
+### Jira Tools (37 tools)
 
 | Category | Tools |
 |----------|-------|
@@ -21,7 +72,7 @@ An MCP (Model Context Protocol) server that lets AI assistants interact with **J
 | **Watchers** | `jira_get_watchers`, `jira_add_watcher` |
 | **Links** | `jira_get_link_types`, `jira_link_issues` |
 
-### Confluence Tools (15+ tools)
+### Confluence Tools (16 tools)
 
 | Category | Tools |
 |----------|-------|
@@ -32,43 +83,25 @@ An MCP (Model Context Protocol) server that lets AI assistants interact with **J
 | **Hierarchy** | `confluence_get_page_ancestors` |
 | **Comments** | `confluence_get_page_comments`, `confluence_add_page_comment` |
 
-## Setup
+---
 
-### 1. Install dependencies
+## Alternative: Run from Source
 
 ```bash
+git clone https://github.com/halim-23/jira-mcp-server.git
 cd jira-mcp-server
 pip install -r requirements.txt
-```
-
-### 2. Configure credentials
-
-```bash
 cp .env.example .env
-# Edit .env with your Atlassian credentials
+# Edit .env with your credentials
+python3 main.py
 ```
 
-Get your API token at: https://id.atlassian.com/manage-profile/security/api-tokens
-
-```env
-JIRA_BASE_URL=https://your-domain.atlassian.net
-JIRA_USER_EMAIL=your-email@example.com
-JIRA_API_TOKEN=your-api-token
-
-# Confluence (usually same domain — you can omit these if same as Jira)
-CONFLUENCE_BASE_URL=https://your-domain.atlassian.net
-CONFLUENCE_USER_EMAIL=your-email@example.com
-CONFLUENCE_API_TOKEN=your-api-token
-```
-
-### 3. Add to your MCP client config
-
-For **Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
-
+Then point your MCP client to:
 ```json
 {
   "mcpServers": {
-    "jira": {
+    "jira-mcp-server": {
+      "type": "local",
       "command": "python3",
       "args": ["/path/to/jira-mcp-server/main.py"]
     }
@@ -76,50 +109,49 @@ For **Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_con
 }
 ```
 
-Or pass credentials via env in the config (see `mcp_config.example.json`).
+---
 
-### 4. Run manually (for testing)
+## Environment Variables
 
-```bash
-python3 main.py
-```
+| Variable | Description |
+|----------|-------------|
+| `ATLASSIAN_URL` | Your Atlassian base URL, e.g. `https://yourco.atlassian.net` |
+| `ATLASSIAN_EMAIL` | Your Atlassian account email |
+| `ATLASSIAN_API_TOKEN` | API token from [id.atlassian.com](https://id.atlassian.com/manage-profile/security/api-tokens) |
 
-## Project Structure
+All three variables are **required**. They can be set in a `.env` file (for local dev) or passed via the `env` block in your MCP client config (recommended for `uvx` usage).
 
-```
-jira-mcp-server/
-├── main.py                        # Entry point
-├── requirements.txt
-├── .env.example                   # Credential template
-├── mcp_config.example.json        # MCP client config example
-└── src/
-    ├── server.py                  # MCP server wiring
-    ├── jira_client.py             # Jira REST API v3 client
-    ├── confluence_client.py       # Confluence REST API v2 client
-    └── tools/
-        ├── jira_tools.py          # Jira tool definitions + handlers
-        └── confluence_tools.py    # Confluence tool definitions + handlers
-```
+---
 
-## Usage Examples
+## Example Usage
 
-> **Create a bug:**
-> "Create a bug in project MYPROJ titled 'Login fails on mobile' with high priority"
+Once configured, ask your AI assistant:
 
-> **Sprint management:**
-> "Show me all active sprints on board 42, then move PROJ-101 and PROJ-102 into the current sprint"
+- *"Show me all open issues in project MYPROJ"*
+- *"Create a bug ticket: Login page throws 500 error on Safari"*
+- *"Move PROJ-42 to In Progress and assign it to me"*
+- *"Log 2 hours on PROJ-42 with comment 'code review'"*
+- *"Show the active sprint on board 123"*
+- *"Search Confluence for pages about deployment"*
+- *"Create a Confluence page in space ENG titled 'API Design Guidelines'"*
 
-> **Transition an issue:**
-> "Move PROJ-456 to Done and add a comment saying it was fixed in v2.1"
+---
 
-> **Confluence:**
-> "Create a page in the TEAM space titled 'Sprint 42 Retrospective' with a summary of what went well"
+## Technical Notes
 
-> **Search:**
-> "Find all unresolved bugs assigned to me in the BACKEND project"
+This server targets **Jira Cloud** and **Confluence Cloud** REST APIs:
 
-## Authentication
+- Jira: `REST API v3` (`/rest/api/3/`) + Agile API (`/rest/agile/1.0/`)
+- Confluence: `REST API v2` (`/wiki/api/v2/`) with v1 fallback for CQL search
+- Search uses `POST /rest/api/3/search/jql` (the current Jira Cloud search endpoint)
+- All API calls are async via `httpx`
 
-Uses **Basic Auth** with an Atlassian API token (not your password). Works with Jira Cloud and Confluence Cloud.
+---
 
-For **Jira Data Center / Server**, you may need to adjust the API base paths in the client files.
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting bugs, requesting features, and submitting pull requests.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

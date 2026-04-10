@@ -1,15 +1,13 @@
 {
   "mcpServers": {
-    "jira": {
-      "command": "python3",
-      "args": ["/opt/devs/jira-mcp-server/main.py"],
+    "jira-mcp-server": {
+      "type": "local",
+      "command": "uvx",
+      "args": ["jira-mcp-server"],
       "env": {
-        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
-        "JIRA_USER_EMAIL": "your-email@example.com",
-        "JIRA_API_TOKEN": "your-api-token",
-        "CONFLUENCE_BASE_URL": "https://your-domain.atlassian.net",
-        "CONFLUENCE_USER_EMAIL": "your-email@example.com",
-        "CONFLUENCE_API_TOKEN": "your-api-token"
+        "ATLASSIAN_URL": "https://your-domain.atlassian.net",
+        "ATLASSIAN_EMAIL": "your-email@example.com",
+        "ATLASSIAN_API_TOKEN": "your-api-token"
       }
     }
   }
