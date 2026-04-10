@@ -1,7 +1,7 @@
 # Jira & Confluence MCP Server
 
-[![PyPI version](https://img.shields.io/pypi/v/jira-mcp-server.svg)](https://pypi.org/project/jira-mcp-server/)
-[![Python](https://img.shields.io/pypi/pyversions/jira-mcp-server.svg)](https://pypi.org/project/jira-mcp-server/)
+[![PyPI version](https://img.shields.io/pypi/v/atlassian-mcp.svg)](https://pypi.org/project/atlassian-mcp/)
+[![Python](https://img.shields.io/pypi/pyversions/atlassian-mcp.svg)](https://pypi.org/project/atlassian-mcp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants interact with **Jira** and **Confluence** via natural language. Works with Claude, GitHub Copilot, and any MCP-compatible client.
@@ -22,10 +22,10 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that l
 ```json
 {
   "mcpServers": {
-    "jira-mcp-server": {
+    "atlassian-mcp": {
       "type": "local",
       "command": "uvx",
-      "args": ["jira-mcp-server"],
+      "args": ["atlassian-mcp"],
       "env": {
         "ATLASSIAN_URL": "https://your-domain.atlassian.net",
         "ATLASSIAN_EMAIL": "your-email@example.com",
@@ -100,10 +100,10 @@ Then point your MCP client to:
 ```json
 {
   "mcpServers": {
-    "jira-mcp-server": {
+    "atlassian-mcp": {
       "type": "local",
       "command": "python3",
-      "args": ["/path/to/jira-mcp-server/main.py"]
+      "args": ["atlassian-mcp"],
     }
   }
 }

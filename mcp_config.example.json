@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "jira-mcp-server": {
+    "atlassian-mcp": {
       "type": "local",
       "command": "uvx",
-      "args": ["jira-mcp-server"],
+      "args": ["atlassian-mcp"],
       "env": {
         "ATLASSIAN_URL": "https://your-domain.atlassian.net",
         "ATLASSIAN_EMAIL": "your-email@example.com",

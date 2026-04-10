@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "jira-mcp-server"
+name = "atlassian-mcp"
 version = "1.0.0"
 description = "MCP server for Jira & Confluence — 53 tools for issue management, sprint planning, board management, and Confluence page management"
 readme = "README.md"
@@ -38,7 +38,7 @@ Issues = "https://github.com/halim-23/jira-mcp-server/issues"
 Changelog = "https://github.com/halim-23/jira-mcp-server/blob/main/CHANGELOG.md"
 
 [project.scripts]
-jira-mcp-server = "jira_mcp_server.__main__:run"
+atlassian-mcp = "jira_mcp_server.__main__:run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["jira_mcp_server"]
