@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "jira": {
+      "command": "python3",
+      "args": ["/opt/devs/jira-mcp-server/main.py"],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_USER_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token",
+        "CONFLUENCE_BASE_URL": "https://your-domain.atlassian.net",
+        "CONFLUENCE_USER_EMAIL": "your-email@example.com",
+        "CONFLUENCE_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
